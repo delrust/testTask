@@ -1,0 +1,28 @@
+static string GetMainCell(int cellNum) // функция вывода содержимого ячейки основной надписи чертежа Компас(одну строку!)
+        {
+            string name = null;
+
+            KompasObject kompas = (KompasObject)Marshal.GetActiveObject("KOMPAS.Application.5");
+            Document2D Document = (Document2D)kompas.ActiveDocument2D();
+
+            TextItemParam textItemParam = (TextItemParam)kompas.GetParamStruct(31);
+            TextLineParam textLineParam = (TextLineParam)kompas.GetParamStruct(29);
+
+            ksStamp Stamp = (ksStamp)Document.GetStamp();
+            Stamp.ksOpenStamp();
+
+            Stamp.ksColumnNumber(cellNum);
+
+            ksDynamicArray DynamicArrayLines = Stamp.ksGetStampColumnText(0);  //находим линию
+
+            DynamicArrayLines.ksGetArrayItem(0, textLineParam);
+            ksDynamicArray DynamicArrayItems = (ksDynamicArray)textLineParam.GetTextItemArr();
+
+            DynamicArrayItems.ksGetArrayItem(0, textItemParam);
+            name = textItemParam.s;
+            Console.WriteLine(name);
+
+            Stamp.ksCloseStamp();
+
+            return name;
+        }
