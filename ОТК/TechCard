@@ -1,0 +1,45 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp3
+{
+    internal class TechCard
+    {
+        string name;
+        int accuracyClass;
+        int type;
+        string material;
+        string routeNumber;  //номер маршрута
+        Dictionary<string, Operation> operations = new Dictionary<string, Operation>();
+
+        private int listCount = 1;
+
+        public TechCard(string name, int accuracyClass, int type)
+        {
+            this.name = name;
+            this.accuracyClass = accuracyClass;
+            this.type = type;
+        }
+
+
+
+        public void ShowName()
+        {
+            Console.WriteLine("Деталь п/ш " + accuracyClass + "-" + name + "." + type);
+        }
+
+        public void CompassDraw(int listCount)
+        {
+            //создание всей карты и заполнение полей
+        }
+
+        private void AddList()
+        {
+            listCount++;
+        }
+
+    }
+}
