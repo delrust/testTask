@@ -1,0 +1,106 @@
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using KompasAPI7;
+using Kompas6API5;
+using Kompas6Constants;
+using System.Runtime.InteropServices;
+using static System.Net.Mime.MediaTypeNames;
+using System.Xml.Linq;
+
+//1.файл должен создаваться в той же папке где на текущий момент запускается программа
+//2. переделывать на открытие файла при запуске не обязательно, это все зависит как вам удобно будет с этой программой работать. Можно например если нет активного окна, выдавать диалог выбора файла.
+//В любом случае если нет активного окна или не выбран файл программа должна создать пустой файл
+//3. Файл должен иметь наименование "ItemsDownload" (я обеспечу что в папке нет файла с таким именем)
+
+namespace DetailUnload
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            CreateFile1(ChangeIntoXML(GetMainCell(2), GetMainCell(1)));
+            
+            Console.ReadKey();
+        }
+
+        static string GetMainCell(int cellNum) //метод работы с компасом, возвращает содержимое ячейки под номером cellNum
+        {
+            string name = null;
+
+            try
+            {
+                KompasObject kompas = (KompasObject)Marshal.GetActiveObject("KOMPAS.Application.5");
+
+                Document2D Document = (Document2D)kompas.ActiveDocument2D();
+
+                if (Document == null)
+                    return "";
+
+                TextItemParam textItemParam = (TextItemParam)kompas.GetParamStruct(31);
+                TextLineParam textLineParam = (TextLineParam)kompas.GetParamStruct(29);
+
+                ksStamp Stamp = (ksStamp)Document.GetStamp();
+
+                Stamp.ksOpenStamp();
+
+                Stamp.ksColumnNumber(cellNum);
+
+                ksDynamicArray DynamicArrayLines = Stamp.ksGetStampColumnText(0);  //находим линию
+
+                DynamicArrayLines.ksGetArrayItem(0, textLineParam);
+                ksDynamicArray DynamicArrayItems = (ksDynamicArray)textLineParam.GetTextItemArr();
+
+                DynamicArrayItems.ksGetArrayItem(0, textItemParam);
+                name = textItemParam.s;
+
+                Stamp.ksCloseStamp();
+
+                return name;
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
+        static string ChangeIntoXML(string num, string name) //получает 2 значения из основной надписи и переводит в формат .xml
+        {
+            string xml = "";
+
+            xml = "<Деталь>\n" +
+                "<Обозначение>" + num + "</Обозначение>\n" +
+                "<Наименование>" + name + "</Наименование>\n" +
+                "</Деталь>";
+
+            return xml;
+        }
+
+
+        static void CreateFile1(string xml) // создает файл по пути path и записывает в него строку из переменной xml
+        {
+            try
+            {
+                // Create the file, or overwrite if the file exists.
+                using (FileStream fs = File.Create("ItemsDownload.xml"))
+                {
+                    byte[] info = new UTF8Encoding(true).GetBytes(xml);
+                    // Add some information to the file.
+                    fs.Write(info, 0, info.Length);
+                    Console.WriteLine("Файл записан!!!");
+                    Console.WriteLine(xml);
+                }
+
+                // Open the stream and read it back.
+                //using (StreamReader sr = File.OpenText(path)) { string s = ""; while ((s = sr.ReadLine()) != null) { Console.WriteLine(s); } }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+    }
+}
