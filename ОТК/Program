@@ -1,0 +1,168 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
+
+using KompasAPI7;
+using Kompas6API5;
+using Kompas6Constants;
+using System.Runtime.InteropServices;
+using static System.Net.Mime.MediaTypeNames;
+using System.Xml.Linq;
+
+namespace ConsoleApp3
+{
+    internal class Program
+    { 
+        static void Main(string[] args)
+        {
+
+            //TechCard a = new TechCard("126114 РН", 5, 52);
+            //a.ShowName();
+
+            //Console.ReadKey();
+
+            CreateMainTableList2();
+        }
+
+
+
+
+        static void CreateTable3(TechCard techCard)
+        {
+            KompasObject kompas = (KompasObject)Marshal.GetActiveObject("KOMPAS.Application.5");
+            ksDocument2D doc = (ksDocument2D)kompas.ActiveDocument2D();
+            kompas.ksMessage("Работает");
+
+
+            doc.ksTable();
+
+            doc.ksLineSeg(50, 50, 90, 50, 2); // Координаты(1-4) и стиль линии(5)
+            doc.ksLineSeg(50, 40, 90, 40, 1);
+            doc.ksLineSeg(50, 30, 90, 30, 1);
+            doc.ksLineSeg(50, 50, 50, 30, 1);
+            doc.ksLineSeg(70, 50, 70, 30, 1);
+            doc.ksLineSeg(90, 50, 90, 30, 1);
+
+            doc.ksText(52, 48, 0, 5, 1, 0, "1");
+            doc.ksText(72, 48, 0, 5, 1, 0, "2");
+            doc.ksText(52, 38, 0, 5, 1, 0, "3");
+            doc.ksText(72, 38, 0, 5, 1, 0, "4");
+            doc.ksEndObj();
+        }
+
+        static void CreateMainTableList2()
+        {
+            KompasObject kompas = (KompasObject)Marshal.GetActiveObject("KOMPAS.Application.5");
+            ksDocument2D doc = (ksDocument2D)kompas.ActiveDocument2D();
+            //kompas.ksMessage("Создается таблица");
+
+            int lenX = 272;
+            int lenY = 200;
+
+            int delX = 20;
+            int delY = 5;
+
+
+            doc.ksTable();
+            #region [Table]
+            //создание таблицы
+            //внешняя рамка
+            doc.ksLineSeg(delX, delY, delX, delY+lenY, 1);
+            doc.ksLineSeg(delX, delY+lenY, delX+lenX, delY+lenY, 1);
+            doc.ksLineSeg(delX + lenX, delY + lenY, delX+lenX, delY, 1);
+            doc.ksLineSeg(delX + lenX, delY, delX, delY, 1);
+
+            // Шапка
+            doc.ksLineSeg(delX, delY + lenY - 14, delX + lenX, delY + lenY - 14, 1);
+
+            doc.ksLineSeg(delX + 16, delY + lenY, delX + 16, delY + lenY - 14, 1);
+            doc.ksLineSeg(delX + 216, delY + lenY, delX + 216, delY + lenY - 14, 1);
+            doc.ksLineSeg(delX + 233, delY + lenY, delX + 233, delY + lenY - 14, 1);
+            doc.ksLineSeg(delX + 250, delY + lenY, delX + 250, delY + lenY - 14, 1);
+
+            doc.ksLineSeg(delX+16, delY + lenY - 7, delX + lenX, delY + lenY - 7, 1);
+
+            doc.ksLineSeg(delX + 16 + 35, delY + lenY - 7, delX + 16 + 35, delY + lenY - 14, 1);
+            doc.ksLineSeg(delX + 16 + 70, delY + lenY - 7, delX + 16 + 70, delY + lenY - 14, 1);
+            doc.ksLineSeg(delX + 16 + 97, delY + lenY - 7, delX + 16 + 97, delY + lenY - 14, 1);
+            doc.ksLineSeg(delX + 16 + 106, delY + lenY - 7, delX + 16 + 106, delY + lenY - 14, 1);
+            doc.ksLineSeg(delX + 16 + 133, delY + lenY - 7, delX + 16 + 133, delY + lenY - 14, 1);
+            doc.ksLineSeg(delX + 16 + 142, delY + lenY - 7, delX + 16 + 142, delY + lenY - 14, 1);
+            doc.ksLineSeg(delX + 16 + 171, delY + lenY - 7, delX + 16 + 171, delY + lenY - 14, 1);
+
+            //Подвал 
+            doc.ksLineSeg(delX, delY+14, delX+lenX, delY + 14, 1);
+
+            doc.ksLineSeg(delX+38, delY, delX + 38, delY+14, 1);
+            doc.ksLineSeg(delX+78, delY, delX + 78, delY + 14, 1);
+            doc.ksLineSeg(delX+116, delY, delX + 126, delY + 14, 1);
+            doc.ksLineSeg(delX + 156, delY, delX + 156, delY + 14, 1);
+            doc.ksLineSeg(delX + 194, delY, delX + 194, delY + 14, 1);
+            doc.ksLineSeg(delX + 234, delY, delX + 234, delY + 14, 1);
+
+            doc.ksLineSeg(delX, delY+7, delX + 38, delY + 7, 1);
+            doc.ksLineSeg(delX + 78, delY + 7, delX + 116, delY + 7, 1);
+            doc.ksLineSeg(delX + 156, delY + 7, delX + 194, delY + 7, 1);
+            doc.ksLineSeg(delX + 234, delY + 7, delX + 272, delY + 7, 1);
+
+
+            //Поля изм. и примечаний
+
+            doc.ksLineSeg(delX, delY + 14 + 37, delX + lenX, delY + 14 + 37, 1);
+
+            doc.ksLineSeg(delX+98, delY + 14, delX + 98, delY + 14 + 37, 1);
+            doc.ksLineSeg(delX+98+7, delY + 14, delX + 98+7, delY + 14 + 37, 1);
+
+            doc.ksLineSeg(delX, delY + 21, delX + 98, delY + 21, 2);
+            doc.ksLineSeg(delX, delY + 21 + 5, delX + 98, delY + 21 + 5, 2);
+            doc.ksLineSeg(delX, delY + 21 + 10, delX + 98, delY + 21 + 10, 2);
+            doc.ksLineSeg(delX, delY + 21 + 15, delX + 98, delY + 21 + 15, 2);
+            doc.ksLineSeg(delX, delY + 21 + 20, delX + 98, delY + 21 + 20, 2);
+            doc.ksLineSeg(delX, delY + 21 + 25, delX + 98, delY + 21 + 25, 2);
+
+            doc.ksLineSeg(delX + 6, delY + 21, delX + 6, delY + 21 + 30, 2);
+            doc.ksLineSeg(delX + 21, delY + 21, delX + 21, delY + 21 + 30, 2);
+            doc.ksLineSeg(delX + 35, delY + 21, delX + 35, delY + 21 + 30, 2);
+            doc.ksLineSeg(delX + 49, delY + 21, delX + 49, delY + 21 + 30, 1);
+            doc.ksLineSeg(delX + 55, delY + 21, delX + 55, delY + 21 + 30, 2);
+            doc.ksLineSeg(delX + 70, delY + 21, delX + 70, delY + 21 + 30, 2);
+            doc.ksLineSeg(delX + 84, delY + 21, delX + 84, delY + 21 + 30, 2);
+
+            #endregion
+            //инициализирование ячеек
+            //1 - 28,198;  2 - 201,136;  3 - 201,244;  4 - 201,261; 5 - 201,281;
+
+            #region[init]
+
+
+            doc.ksText(28, 198, 0, 4, 1, 0, "ООО\n\"ЗПП\"");
+            doc.ksText(136, 201, 0, 4.5, 1, 0, "Операционная технологическия карта");
+            doc.ksText(244, 201, 0, 5, 1, 0, "Цех");
+            doc.ksText(261, 201, 0, 5, 1, 0, "Арх. №");
+
+            doc.ksText(53, 194, 0, 3, 1, 0, "Усл. обозначение\nдетали п\\ш");
+            doc.ksText(119, 194, 0, 3, 1, 0, "класс\nточности");
+            doc.ksText(155, 194, 0, 3.5, 1, 0, "деталь");
+            doc.ksText(192, 194, 0, 3.5, 1, 0, "материал");
+            doc.ksText(244, 194, 0, 3.5, 1, 0, "ЦПП");
+            doc.ksText(261, 194, 0, 3.5, 1, 0, "Лист");
+
+
+            #endregion
+
+
+
+            //ввод полученных данных
+
+
+
+
+
+            doc.ksEndObj();
+        }
+
+    }
+}
